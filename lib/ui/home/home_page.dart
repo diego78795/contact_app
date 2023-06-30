@@ -9,7 +9,7 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: GetBuilder<HomeController>(builder: (_) {
-      return SafeArea(child: Text("Home Page"));
+      return const SafeArea(child: Center(child: Text("Home Page")));
     }));
   }
 }
