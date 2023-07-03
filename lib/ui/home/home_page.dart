@@ -11,9 +11,10 @@ class HomePage extends GetView<HomeController> {
     return Scaffold(body: GetBuilder<HomeController>(builder: (_) {
       return SafeArea(
           child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 20),
+        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
         shrinkWrap: true,
         children: [
+          const Align(alignment: Alignment.topRight, child: AddButton()),
           _.isLoading
               ? const Center(child: CircularProgressIndicator())
               : ListView.separated(
@@ -36,6 +37,31 @@ class HomePage extends GetView<HomeController> {
   }
 }
 
+class AddButton extends GetView<HomeController> {
+  const AddButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: () => {},
+        style: ButtonStyle(
+            backgroundColor: const MaterialStatePropertyAll<Color>(Colors.blue),
+            shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100)))),
+        child: const SizedBox(
+            width: 160,
+            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Icon(Icons.add, color: Colors.white),
+              Text('Adicionar contato',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16))
+            ])));
+  }
+}
+
 class ContactCard extends StatelessWidget {
   const ContactCard({super.key, required this.contact});
 
@@ -46,7 +72,6 @@ class ContactCard extends StatelessWidget {
     return GetBuilder<HomeController>(
       builder: (_) {
         return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10),
             padding: const EdgeInsets.symmetric(horizontal: 10),
             height: 100,
             decoration: BoxDecoration(
