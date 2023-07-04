@@ -4,12 +4,17 @@ import 'package:flutter/foundation.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class HomeController extends GetxController {
   HomeController();
 
   bool isLoading = true;
   List<Map> contactList = [];
+
+  final _image = XFile('').obs;
+  get image => _image.value;
+  set image(value) => _image.value = value;
 
   @override
   void onInit() {
