@@ -64,8 +64,11 @@ class ContactPage extends GetView<ContactController> {
                     ),
                     const SizedBox(height: 40),
                     const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         EditButton(),
+                        SizedBox(width: 20),
+                        DeleteButton(),
                       ],
                     )
                   ],
@@ -172,6 +175,41 @@ class EditButton extends GetView<ContactController> {
   }
 }
 
+class DeleteButton extends GetView<ContactController> {
+  const DeleteButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<ContactController>(builder: (_) {
+      return ElevatedButton(
+        onPressed: () {
+          _.deleteContact();
+        },
+        style: ButtonStyle(
+          backgroundColor: const MaterialStatePropertyAll<Color>(Colors.red),
+          shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+          ),
+        ),
+        child: const SizedBox(
+          width: 100,
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Icon(Icons.delete, color: Colors.white),
+            SizedBox(width: 5),
+            Text(
+              'Excluir',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16),
+            )
+          ]),
+        ),
+      );
+    });
+  }
+}
+
 class FormModal extends GetView<ContactController> {
   const FormModal({super.key});
 
@@ -247,7 +285,7 @@ class FormModal extends GetView<ContactController> {
                             'telephone': telephoneController.text,
                             'birthdate': birthdateController.text,
                           };
-                          _.editContact(nameController.text, contact);
+                          _.editContact(contact);
                           Navigator.pop(context);
                         }
                       },
