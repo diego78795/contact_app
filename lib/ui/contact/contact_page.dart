@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:contact_app/controller/contact_controller.dart';
 
 class ContactPage extends GetView<ContactController> {
@@ -10,56 +11,67 @@ class ContactPage extends GetView<ContactController> {
   Widget build(BuildContext context) {
     return Scaffold(body: GetBuilder<ContactController>(builder: (_) {
       return SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            const Align(
-              alignment: Alignment.topLeft,
-              child: BackButton(),
-            ),
-            Center(
-              child: Container(
-                width: 200,
-                height: 200,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  color: Colors.blue,
+          child: ListView(
+        padding: const EdgeInsets.all(20),
+        children: [
+          const Align(
+            alignment: Alignment.topLeft,
+            child: BackButton(),
+          ),
+          _.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : Column(
+                  children: [
+                    Center(
+                      child: Container(
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+                    const Text(
+                      'Informações',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextInfo(
+                      label: 'Nome',
+                      data: _.contactData['name'],
+                    ),
+                    const SizedBox(height: 10),
+                    TextInfo(
+                      label: 'Email',
+                      data: _.contactData['email'],
+                    ),
+                    const SizedBox(height: 10),
+                    TextInfo(
+                      label: 'Telefone',
+                      data: _.contactData['telephone'],
+                    ),
+                    const SizedBox(height: 10),
+                    TextInfo(
+                      label: 'Data de nascimento',
+                      data: _.contactData['birthdate'] != ''
+                          ? _.contactData['birthdate']
+                          : '-',
+                    ),
+                    const SizedBox(height: 40),
+                    const Row(
+                      children: [
+                        EditButton(),
+                      ],
+                    )
+                  ],
                 ),
-              ),
-            ),
-            const SizedBox(height: 40),
-            const Text(
-              'Informações',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextInfo(
-              label: 'Nome',
-              data: _.contactData['name'],
-            ),
-            const SizedBox(height: 10),
-            TextInfo(
-              label: 'Email',
-              data: _.contactData['email'],
-            ),
-            const SizedBox(height: 10),
-            TextInfo(
-              label: 'Telefone',
-              data: _.contactData['telephone'],
-            ),
-            const SizedBox(height: 10),
-            TextInfo(
-              label: 'Data de nascimento',
-              data: _.contactData['birthdate'] != ''
-                  ? _.contactData['birthdate']
-                  : '-',
-            )
-          ],
-        ),
-      );
+        ],
+      ));
     }));
   }
 }
@@ -122,6 +134,38 @@ class BackButton extends GetView<ContactController> {
                   fontFamily: 'Montserrat',
                   fontWeight: FontWeight.w500,
                   fontSize: 12))
+        ]),
+      ),
+    );
+  }
+}
+
+class EditButton extends GetView<ContactController> {
+  const EditButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () => {
+        showBarModalBottomSheet(
+            context: context, builder: (context) => const FormModal())
+      },
+      style: ButtonStyle(
+        backgroundColor: const MaterialStatePropertyAll<Color>(Colors.blue),
+        shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+        ),
+      ),
+      child: const SizedBox(
+        width: 100,
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Icon(Icons.edit, color: Colors.white),
+          SizedBox(width: 5),
+          Text(
+            'Editar',
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16),
+          )
         ]),
       ),
     );
