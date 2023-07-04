@@ -73,7 +73,7 @@ class AddButton extends GetView<HomeController> {
 class ContactCard extends StatelessWidget {
   const ContactCard({super.key, required this.contact});
 
-  final Map<String, String> contact;
+  final Map contact;
 
   @override
   Widget build(BuildContext context) {
