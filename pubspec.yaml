@@ -10,7 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   get: ^4.6.5
-  modal_bottom_sheet: ^2.1.2
+  modal_bottom_sheet: ^3.0.0-pre
 
 dev_dependencies:
   flutter_test:
