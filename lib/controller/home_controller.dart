@@ -45,7 +45,7 @@ class HomeController extends GetxController {
     }
   }
 
-  Future<void> addContact(String name, Map contact) async {
+  Future<void> addContact(Map contact) async {
     isLoading = true;
     update();
     const FlutterSecureStorage secureStorage = FlutterSecureStorage();

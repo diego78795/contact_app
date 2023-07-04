@@ -216,7 +216,7 @@ class FormModal extends GetView<HomeController> {
                             'telephone': telephoneController.text,
                             'birthdate': birthdateController.text,
                           };
-                          _.addContact(nameController.text, contact);
+                          _.addContact(contact);
                           Navigator.pop(context);
                         }
                       },
