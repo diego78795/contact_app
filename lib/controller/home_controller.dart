@@ -57,7 +57,7 @@ class HomeController extends GetxController {
     final Box<Map> contactBox =
         await Hive.openBox<Map>('contactList', encryptionCipher: cipher);
 
-    await contactBox.put(name, contact);
+    await contactBox.put('${contactBox.length}', contact);
 
     contactList.add(contact);
     isLoading = false;

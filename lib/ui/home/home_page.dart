@@ -26,6 +26,7 @@ class HomePage extends GetView<HomeController> {
                     itemCount: _.contactList.length,
                     itemBuilder: (context, index) {
                       return ContactCard(
+                        keyContact: index,
                         contact: _.contactList[index],
                       );
                     },
@@ -72,8 +73,10 @@ class AddButton extends GetView<HomeController> {
 }
 
 class ContactCard extends StatelessWidget {
-  const ContactCard({super.key, required this.contact});
+  const ContactCard(
+      {super.key, required this.contact, required this.keyContact});
 
+  final int keyContact;
   final Map contact;
 
   @override
@@ -82,8 +85,7 @@ class ContactCard extends StatelessWidget {
       builder: (_) {
         return GestureDetector(
             onTap: () => {
-                  Get.toNamed(Routes.contact,
-                      arguments: {'key': contact['name']})
+                  Get.toNamed(Routes.contact, arguments: {'key': '$keyContact'})
                 },
             child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
