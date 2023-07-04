@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:contact_app/routes/app_pages.dart';
@@ -211,6 +214,26 @@ class FormModal extends GetView<HomeController> {
                           hintText: 'dd/mm/aaaa'),
                     ),
                     const SizedBox(
+                      height: 20,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        _.image = await ImagePicker()
+                            .pickImage(source: ImageSource.gallery);
+                      },
+                      child: Container(
+                        height: 200,
+                        decoration: BoxDecoration(border: Border.all()),
+                        child: GetX<HomeController>(
+                          builder: (_) {
+                            return _.image.path != ''
+                                ? Image.file(File(_.image.path))
+                                : const Icon(Icons.photo);
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
                       height: 40,
                     ),
                     ElevatedButton(
@@ -219,7 +242,7 @@ class FormModal extends GetView<HomeController> {
                         if (nameController.text != '' ||
                             emailController.text != '' ||
                             telephoneController.text != '') {
-                          Map<String, String> contact = {
+                          Map contact = {
                             'name': nameController.text,
                             'email': emailController.text,
                             'telephone': telephoneController.text,
