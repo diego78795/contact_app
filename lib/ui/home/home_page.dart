@@ -85,7 +85,12 @@ class ContactCard extends StatelessWidget {
       builder: (_) {
         return GestureDetector(
             onTap: () => {
-                  Get.toNamed(Routes.contact, arguments: {'key': '$keyContact'})
+                  Navigator.of(context).pushNamed(Routes.contact,
+                      arguments: {'key': '$keyContact'}).then((result) {
+                    if (result != null) {
+                      _.fetchData();
+                    }
+                  })
                 },
             child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),

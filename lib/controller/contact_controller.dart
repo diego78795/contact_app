@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 
@@ -58,7 +59,7 @@ class ContactController extends GetxController {
     update();
   }
 
-  Future<void> deleteContact() async {
+  Future<void> deleteContact(BuildContext context) async {
     isLoading = true;
     update();
     const FlutterSecureStorage secureStorage = FlutterSecureStorage();
@@ -70,7 +71,8 @@ class ContactController extends GetxController {
     final Box<Map> contactBox =
         await Hive.openBox<Map>('contactList', encryptionCipher: cipher);
 
-    await contactBox.delete(Get.arguments['key']);
-    Get.back();
+    await contactBox.delete(Get.arguments['key']).then((value) {
+      Navigator.pop(context, true);
+    });
   }
 }

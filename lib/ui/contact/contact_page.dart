@@ -113,7 +113,7 @@ class BackButton extends GetView<ContactController> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => {Get.back()},
+      onPressed: () => {Navigator.pop(context, true)},
       style: ButtonStyle(
           side: const MaterialStatePropertyAll<BorderSide>(
               BorderSide(width: 1, color: Color.fromRGBO(250, 250, 250, 1))),
@@ -183,7 +183,7 @@ class DeleteButton extends GetView<ContactController> {
     return GetBuilder<ContactController>(builder: (_) {
       return ElevatedButton(
         onPressed: () {
-          _.deleteContact();
+          _.deleteContact(context);
         },
         style: ButtonStyle(
           backgroundColor: const MaterialStatePropertyAll<Color>(Colors.red),

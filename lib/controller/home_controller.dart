@@ -24,6 +24,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> initStorage() async {
+    contactList = [];
     await Hive.initFlutter();
 
     const FlutterSecureStorage secureStorage = FlutterSecureStorage();
