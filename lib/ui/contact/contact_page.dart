@@ -24,13 +24,17 @@ class ContactPage extends GetView<ContactController> {
                   children: [
                     Center(
                       child: Container(
-                        width: 200,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: Colors.blue,
-                        ),
-                      ),
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Colors.blue,
+                          ),
+                          child: const Icon(
+                            Icons.person,
+                            size: 200,
+                            color: Colors.black54,
+                          )),
                     ),
                     const SizedBox(height: 40),
                     const Text(

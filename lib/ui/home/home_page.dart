@@ -100,13 +100,17 @@ class ContactCard extends StatelessWidget {
                 child: Row(
                   children: [
                     Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Colors.blue,
-                      ),
-                    ),
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: Colors.blue,
+                        ),
+                        child: const Icon(
+                          Icons.person,
+                          size: 80,
+                          color: Colors.black54,
+                        )),
                     const SizedBox(
                       width: 20,
                     ),
