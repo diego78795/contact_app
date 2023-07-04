@@ -1,7 +1,8 @@
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import 'package:contact_app/routes/app_pages.dart';
 import 'package:contact_app/controller/home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
@@ -79,43 +80,48 @@ class ContactCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       builder: (_) {
-        return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            height: 100,
-            decoration: BoxDecoration(
-                border: Border.all(color: Colors.black, width: 1)),
-            child: Row(
-              children: [
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
-                    color: Colors.blue,
-                  ),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        return GestureDetector(
+            onTap: () => {
+                  Get.toNamed(Routes.contact,
+                      arguments: {'key': contact['name']})
+                },
+            child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                height: 100,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 1)),
+                child: Row(
                   children: [
-                    TextInfo(
-                      label: 'Nome',
-                      data: contact['name'],
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Colors.blue,
+                      ),
                     ),
                     const SizedBox(
-                      height: 5,
+                      width: 20,
                     ),
-                    TextInfo(
-                      label: 'Telefone',
-                      data: contact['telephone'],
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextInfo(
+                          label: 'Nome',
+                          data: contact['name'],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        TextInfo(
+                          label: 'Telefone',
+                          data: contact['telephone'],
+                        )
+                      ],
                     )
                   ],
-                )
-              ],
-            ));
+                )));
       },
     );
   }
