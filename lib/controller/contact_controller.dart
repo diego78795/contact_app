@@ -24,8 +24,6 @@ class ContactController extends GetxController {
   }
 
   Future<void> initStorage() async {
-    await Hive.initFlutter();
-
     const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
     final String? key = await secureStorage.read(key: 'key');
@@ -35,7 +33,10 @@ class ContactController extends GetxController {
     final Box<Map> contactBox =
         await Hive.openBox<Map>('contactList', encryptionCipher: cipher);
 
-    contactData = contactBox.get(Get.arguments['key'])!;
+    Map? res = contactBox.get(Get.arguments['key']);
+    if (res != null) {
+      contactData = res;
+    }
   }
 
   Future<void> editContact(String name, Map contact) async {
