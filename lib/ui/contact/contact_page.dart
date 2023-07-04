@@ -127,3 +127,90 @@ class BackButton extends GetView<ContactController> {
     );
   }
 }
+
+class FormModal extends GetView<ContactController> {
+  const FormModal({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<ContactController>(
+      builder: (_) {
+        TextEditingController nameController = TextEditingController();
+        TextEditingController emailController = TextEditingController();
+        TextEditingController telephoneController = TextEditingController();
+        TextEditingController birthdateController = TextEditingController();
+
+        nameController.text = _.contactData['name'];
+        emailController.text = _.contactData['email'];
+        telephoneController.text = _.contactData['telephone'];
+        birthdateController.text = _.contactData['birthdate'];
+
+        return Container(
+            padding: const EdgeInsets.all(20),
+            child: Form(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const Text(
+                      'Editar Contato',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: nameController,
+                      decoration:
+                          const InputDecoration(labelText: 'Nome Completo *'),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: emailController,
+                      decoration: const InputDecoration(labelText: 'Email *'),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: telephoneController,
+                      decoration: const InputDecoration(
+                          labelText: 'Telefone *', hintText: '(DDD) xxxx-xxxx'),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TextFormField(
+                      controller: birthdateController,
+                      decoration: const InputDecoration(
+                          labelText: 'Data de nascimento',
+                          hintText: 'dd/mm/aaaa'),
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    ElevatedButton(
+                      child: const Text('Editar'),
+                      onPressed: () {
+                        if (nameController.text != '' ||
+                            emailController.text != '' ||
+                            telephoneController.text != '') {
+                          Map<String, String> contact = {
+                            'name': nameController.text,
+                            'email': emailController.text,
+                            'telephone': telephoneController.text,
+                            'birthdate': birthdateController.text,
+                          };
+                          _.editContact(nameController.text, contact);
+                          Navigator.pop(context);
+                        }
+                      },
+                    )
+                  ]),
+            ));
+      },
+    );
+  }
+}
