@@ -1,3 +1,4 @@
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,29 +11,30 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(body: GetBuilder<HomeController>(builder: (_) {
       return SafeArea(
-          child: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-        shrinkWrap: true,
-        children: [
-          const Align(alignment: Alignment.topRight, child: AddButton()),
-          _.isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : ListView.separated(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _.contactList.length,
-                  itemBuilder: (context, index) {
-                    return ContactCard(
-                      contact: _.contactList[index],
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: 10);
-                  },
-                )
-        ],
-      ));
+        child: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+          shrinkWrap: true,
+          children: [
+            const Align(alignment: Alignment.topRight, child: AddButton()),
+            _.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.separated(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _.contactList.length,
+                    itemBuilder: (context, index) {
+                      return ContactCard(
+                        contact: _.contactList[index],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return const SizedBox(height: 10);
+                    },
+                  )
+          ],
+        ),
+      );
     }));
   }
 }
@@ -43,22 +45,28 @@ class AddButton extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-        onPressed: () => {},
-        style: ButtonStyle(
-            backgroundColor: const MaterialStatePropertyAll<Color>(Colors.blue),
-            shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100)))),
-        child: const SizedBox(
-            width: 160,
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Icon(Icons.add, color: Colors.white),
-              Text('Adicionar contato',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16))
-            ])));
+      onPressed: () => {
+        showBarModalBottomSheet(
+            context: context, builder: (context) => const FormModal())
+      },
+      style: ButtonStyle(
+        backgroundColor: const MaterialStatePropertyAll<Color>(Colors.blue),
+        shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
+        ),
+      ),
+      child: const SizedBox(
+        width: 160,
+        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Icon(Icons.add, color: Colors.white),
+          Text(
+            'Adicionar contato',
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w500, fontSize: 16),
+          )
+        ]),
+      ),
+    );
   }
 }
 
@@ -131,5 +139,66 @@ class TextInfo extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class FormModal extends GetView<HomeController> {
+  const FormModal({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController nameController = TextEditingController();
+    TextEditingController emailController = TextEditingController();
+    TextEditingController telephoneController = TextEditingController();
+    TextEditingController birthdateController = TextEditingController();
+
+    return Container(
+        padding: const EdgeInsets.all(20),
+        child: Form(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+            const Text(
+              'Adicionar Contato',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'Nome Completo'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: telephoneController,
+              decoration: const InputDecoration(
+                  labelText: 'Telefone', hintText: '(DDD) xxxx-xxxx'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: birthdateController,
+              decoration: const InputDecoration(
+                  labelText: 'Data de nascimento', hintText: 'dd/mm/aaaa'),
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            ElevatedButton(
+              child: const Text('Adicionar'),
+              onPressed: () => {Navigator.pop(context)},
+            )
+          ]),
+        ));
   }
 }
