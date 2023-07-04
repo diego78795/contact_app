@@ -39,7 +39,7 @@ class ContactController extends GetxController {
     }
   }
 
-  Future<void> editContact(String name, Map contact) async {
+  Future<void> editContact(Map contact) async {
     isLoading = true;
     update();
     const FlutterSecureStorage secureStorage = FlutterSecureStorage();
@@ -56,5 +56,21 @@ class ContactController extends GetxController {
     contactData = contact;
     isLoading = false;
     update();
+  }
+
+  Future<void> deleteContact() async {
+    isLoading = true;
+    update();
+    const FlutterSecureStorage secureStorage = FlutterSecureStorage();
+
+    final String? key = await secureStorage.read(key: 'key');
+    final Uint8List decodeKey = base64Url.decode(key!);
+    HiveAesCipher cipher = HiveAesCipher(decodeKey);
+
+    final Box<Map> contactBox =
+        await Hive.openBox<Map>('contactList', encryptionCipher: cipher);
+
+    await contactBox.delete(Get.arguments['key']);
+    Get.back();
   }
 }
