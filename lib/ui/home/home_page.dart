@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_validator/flutter_validator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
+import 'package:contact_app/extensions/validator/contact_validator.dart';
 
 import 'package:contact_app/routes/app_pages.dart';
 import 'package:contact_app/controller/home_controller.dart';
@@ -169,10 +172,12 @@ class FormModal extends GetView<HomeController> {
         TextEditingController emailController = TextEditingController();
         TextEditingController telephoneController = TextEditingController();
         TextEditingController birthdateController = TextEditingController();
+        final keyForm = GlobalKey<FormState>();
 
         return Container(
             padding: const EdgeInsets.all(20),
             child: Form(
+              key: keyForm,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -194,6 +199,7 @@ class FormModal extends GetView<HomeController> {
                     ),
                     TextFormField(
                       controller: emailController,
+                      validator: ContactValidator(const Validator()).isEmail(),
                       decoration: const InputDecoration(labelText: 'Email *'),
                     ),
                     const SizedBox(
@@ -201,6 +207,8 @@ class FormModal extends GetView<HomeController> {
                     ),
                     TextFormField(
                       controller: telephoneController,
+                      validator:
+                          ContactValidator(const Validator()).isTelephone(),
                       decoration: const InputDecoration(
                           labelText: 'Telefone *', hintText: '(DDD) xxxx-xxxx'),
                     ),
@@ -239,7 +247,8 @@ class FormModal extends GetView<HomeController> {
                     ElevatedButton(
                       child: const Text('Adicionar'),
                       onPressed: () {
-                        if (nameController.text != '' ||
+                        keyForm.currentState!.validate();
+                        /* if (nameController.text != '' ||
                             emailController.text != '' ||
                             telephoneController.text != '') {
                           Map contact = {
@@ -250,7 +259,7 @@ class FormModal extends GetView<HomeController> {
                           };
                           _.addContact(contact);
                           Navigator.pop(context);
-                        }
+                        } */
                       },
                     )
                   ]),
