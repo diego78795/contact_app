@@ -11,4 +11,15 @@ extension ContactValidator on Validator {
           message: "O email digitado é invalido",
         );
   }
+
+  Validator isTelephone() {
+    return copy()
+        .isNotEmpty(
+          message: "O campo de telefone é obrigatorio",
+        )
+        .matches(
+          RegExp(r"^[(][0-9]{2}[)]\s9?[0-9]{4}[-][0-9]{4}$"),
+          message: "O telefone digitado é invalido",
+        );
+  }
 }
