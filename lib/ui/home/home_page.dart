@@ -186,6 +186,8 @@ class FormModal extends GetView<HomeController> {
             ),
             TextFormField(
               controller: nameController,
+              validator: const Validator().isNotEmpty(
+                  message: 'O campo de nome completo é obrigatorio'),
               decoration: const InputDecoration(labelText: 'Nome Completo *'),
             ),
             TextFormField(
@@ -299,19 +301,22 @@ class FormModal extends GetView<HomeController> {
             ElevatedButton(
               child: const Text('Adicionar'),
               onPressed: () {
-                keyForm.currentState!.validate();
-                /* if (nameController.text != '' ||
-                            emailController.text != '' ||
-                            telephoneController.text != '') {
-                          Map contact = {
-                            'name': nameController.text,
-                            'email': emailController.text,
-                            'telephone': telephoneController.text,
-                            'birthdate': birthdateController.text,
-                          };
-                          _.addContact(contact);
-                          Navigator.pop(context);
-                        } */
+                if (keyForm.currentState!.validate()) {
+                  if (_.gender != '') {
+                    Map contact = {
+                      'name': nameController.text,
+                      'nickname': nicknameController.text,
+                      'email': emailController.text,
+                      'telephone': telephoneController.text,
+                      'gender': _.gender,
+                      'birthdate': '${_.birthdate}',
+                    };
+                    _.addContact(contact);
+                    Navigator.pop(context);
+                    _.gender = '';
+                    _.birthdate = DateTime(0);
+                  }
+                }
               },
             )
           ]),
