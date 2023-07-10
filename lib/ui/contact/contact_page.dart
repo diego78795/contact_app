@@ -10,6 +10,8 @@ class ContactPage extends GetView<ContactController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: GetBuilder<ContactController>(builder: (_) {
+      List<String> birthdate =
+          _.contactData['birthdate'].substring(0, 10).split('-');
       return SafeArea(
           child: ListView(
         padding: const EdgeInsets.all(20),
@@ -51,6 +53,11 @@ class ContactPage extends GetView<ContactController> {
                     ),
                     const SizedBox(height: 10),
                     TextInfo(
+                      label: 'Apelido',
+                      data: _.contactData['nickname'],
+                    ),
+                    const SizedBox(height: 10),
+                    TextInfo(
                       label: 'Email',
                       data: _.contactData['email'],
                     ),
@@ -61,9 +68,14 @@ class ContactPage extends GetView<ContactController> {
                     ),
                     const SizedBox(height: 10),
                     TextInfo(
+                      label: 'Gênero',
+                      data: _.contactData['gender'],
+                    ),
+                    const SizedBox(height: 10),
+                    TextInfo(
                       label: 'Data de nascimento',
-                      data: _.contactData['birthdate'] != ''
-                          ? _.contactData['birthdate']
+                      data: _.contactData['birthdate'] != '${DateTime(0)}'
+                          ? '${birthdate[2]}/${birthdate[1]}/${birthdate[0]}'
                           : '-',
                     ),
                     const SizedBox(height: 40),
