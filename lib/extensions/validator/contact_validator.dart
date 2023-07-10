@@ -7,7 +7,7 @@ extension ContactValidator on Validator {
           message: "O campo de email é obrigatorio",
         )
         .matches(
-          RegExp(r"^[a-zA-Z]*[@][a-zA-Z]*$"),
+          RegExp(r"^[[:ascii:]]*[@][[:ascii:]]*$"),
           message: "O email digitado é invalido",
         );
   }
