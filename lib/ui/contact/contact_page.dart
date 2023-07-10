@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_mask/easy_mask.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -36,11 +38,18 @@ class ContactPage extends GetView<ContactController> {
                             borderRadius: BorderRadius.circular(100),
                             color: Colors.blue,
                           ),
-                          child: const Icon(
-                            Icons.person,
-                            size: 200,
-                            color: Colors.black54,
-                          )),
+                          child: _.contactData['image'] != ''
+                              ? FittedBox(
+                                  fit: BoxFit.fill,
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(1000),
+                                      child: Image.file(
+                                          File(_.contactData['image']))))
+                              : const Icon(
+                                  Icons.person,
+                                  size: 200,
+                                  color: Colors.black54,
+                                )),
                     ),
                     const SizedBox(height: 40),
                     const Text(
