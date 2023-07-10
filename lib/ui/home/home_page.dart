@@ -169,112 +169,138 @@ class FormModal extends GetView<HomeController> {
     return GetBuilder<HomeController>(
       builder: (_) {
         TextEditingController nameController = TextEditingController();
+        TextEditingController nicknameController = TextEditingController();
         TextEditingController emailController = TextEditingController();
         TextEditingController telephoneController = TextEditingController();
         final keyForm = GlobalKey<FormState>();
 
-        return Container(
-            padding: const EdgeInsets.all(20),
-            child: Form(
-              key: keyForm,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+        return Form(
+          key: keyForm,
+          child: ListView(padding: const EdgeInsets.all(20), children: [
+            const Text(
+              'Adicionar Contato',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              controller: nameController,
+              decoration: const InputDecoration(labelText: 'Nome Completo *'),
+            ),
+            TextFormField(
+              controller: nicknameController,
+              decoration: const InputDecoration(labelText: 'Apelido'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: emailController,
+              validator: ContactValidator(const Validator()).isEmail(),
+              decoration: const InputDecoration(labelText: 'Email *'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: telephoneController,
+              validator: ContactValidator(const Validator()).isTelephone(),
+              decoration: const InputDecoration(
+                  labelText: 'Telefone *', hintText: '(DDD) xxxx-xxxx'),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Gênero *',
+                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                ),
+                GetX<HomeController>(
+                  builder: (_) {
+                    return DropdownButton(
+                      hint: const Text('Escolha o gênero'),
+                      value: _.gender.isEmpty ? null : _.gender,
+                      onChanged: (selected) => {_.gender = selected.toString()},
+                      items: ['Masculino', 'Femenino', 'Outros']
+                          .map(
+                            (option) => DropdownMenuItem(
+                              value: option,
+                              child: Text(option),
+                            ),
+                          )
+                          .toList(),
+                    );
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+                onTap: () async {
+                  DateTime? newDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime(2000),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                  );
+
+                  newDate == null
+                      ? _.birthdate = DateTime(0)
+                      : _.birthdate = newDate;
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Adicionar Contato',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      'Data de nascimento',
+                      style: TextStyle(fontSize: 16, color: Colors.black54),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: nameController,
-                      decoration:
-                          const InputDecoration(labelText: 'Nome Completo *'),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: emailController,
-                      validator: ContactValidator(const Validator()).isEmail(),
-                      decoration: const InputDecoration(labelText: 'Email *'),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: telephoneController,
-                      validator:
-                          ContactValidator(const Validator()).isTelephone(),
-                      decoration: const InputDecoration(
-                          labelText: 'Telefone *', hintText: '(DDD) xxxx-xxxx'),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                        onTap: () async {
-                          DateTime? newDate = await showDatePicker(
-                            context: context,
-                            initialDate: DateTime(2000),
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime.now(),
-                          );
-
-                          newDate == null
-                              ? _.date = DateTime(0)
-                              : _.date = newDate;
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Data de nascimento',
-                              style: TextStyle(
-                                  fontSize: 16, color: Colors.black54),
-                            ),
-                            GetX<HomeController>(
-                              builder: (_) {
-                                return Text(
-                                  _.date == DateTime(0)
-                                      ? '-'
-                                      : '${_.date.day}/${_.date.month}/${_.date.year}',
-                                  style: const TextStyle(fontSize: 16),
-                                );
-                              },
-                            ),
-                          ],
-                        )),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                      onTap: () async {
-                        _.image = await ImagePicker()
-                            .pickImage(source: ImageSource.gallery);
+                    GetX<HomeController>(
+                      builder: (_) {
+                        return Text(
+                          _.birthdate == DateTime(0)
+                              ? 'Escolha a data de nascimento'
+                              : '${_.birthdate.day}/${_.birthdate.month}/${_.birthdate.year}',
+                          style: const TextStyle(fontSize: 16),
+                        );
                       },
-                      child: Container(
-                        height: 200,
-                        decoration: BoxDecoration(border: Border.all()),
-                        child: GetX<HomeController>(
-                          builder: (_) {
-                            return _.image.path != ''
-                                ? Image.file(File(_.image.path))
-                                : const Icon(Icons.photo);
-                          },
-                        ),
-                      ),
                     ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    ElevatedButton(
-                      child: const Text('Adicionar'),
-                      onPressed: () {
-                        keyForm.currentState!.validate();
-                        /* if (nameController.text != '' ||
+                  ],
+                )),
+            const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () async {
+                _.image =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
+              },
+              child: Container(
+                height: 200,
+                decoration: BoxDecoration(border: Border.all()),
+                child: GetX<HomeController>(
+                  builder: (_) {
+                    return _.image.path != ''
+                        ? Image.file(File(_.image.path))
+                        : const Icon(Icons.photo);
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            ElevatedButton(
+              child: const Text('Adicionar'),
+              onPressed: () {
+                keyForm.currentState!.validate();
+                /* if (nameController.text != '' ||
                             emailController.text != '' ||
                             telephoneController.text != '') {
                           Map contact = {
@@ -286,10 +312,10 @@ class FormModal extends GetView<HomeController> {
                           _.addContact(contact);
                           Navigator.pop(context);
                         } */
-                      },
-                    )
-                  ]),
-            ));
+              },
+            )
+          ]),
+        );
       },
     );
   }
