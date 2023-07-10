@@ -171,7 +171,6 @@ class FormModal extends GetView<HomeController> {
         TextEditingController nameController = TextEditingController();
         TextEditingController emailController = TextEditingController();
         TextEditingController telephoneController = TextEditingController();
-        TextEditingController birthdateController = TextEditingController();
         final keyForm = GlobalKey<FormState>();
 
         return Container(
@@ -213,14 +212,41 @@ class FormModal extends GetView<HomeController> {
                           labelText: 'Telefone *', hintText: '(DDD) xxxx-xxxx'),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
-                    TextFormField(
-                      controller: birthdateController,
-                      decoration: const InputDecoration(
-                          labelText: 'Data de nascimento',
-                          hintText: 'dd/mm/aaaa'),
-                    ),
+                    GestureDetector(
+                        onTap: () async {
+                          DateTime? newDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime(2000),
+                            firstDate: DateTime(1900),
+                            lastDate: DateTime.now(),
+                          );
+
+                          newDate == null
+                              ? _.date = DateTime(0)
+                              : _.date = newDate;
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Data de nascimento',
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.black54),
+                            ),
+                            GetX<HomeController>(
+                              builder: (_) {
+                                return Text(
+                                  _.date == DateTime(0)
+                                      ? '-'
+                                      : '${_.date.day}/${_.date.month}/${_.date.year}',
+                                  style: const TextStyle(fontSize: 16),
+                                );
+                              },
+                            ),
+                          ],
+                        )),
                     const SizedBox(
                       height: 20,
                     ),
