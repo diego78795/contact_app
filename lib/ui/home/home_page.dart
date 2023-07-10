@@ -115,7 +115,11 @@ class ContactCard extends StatelessWidget {
                           color: Colors.blue,
                         ),
                         child: contact['image'] != ''
-                            ? Image.file(File(contact['image']))
+                            ? FittedBox(
+                                fit: BoxFit.fill,
+                                child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(1000),
+                                    child: Image.file(File(contact['image']))))
                             : const Icon(
                                 Icons.person,
                                 size: 80,
