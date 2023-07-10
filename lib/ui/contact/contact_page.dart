@@ -1,5 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:easy_mask/easy_mask.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_validator/flutter_validator.dart';
+
+import 'package:contact_app/extensions/validator/contact_validator.dart';
 
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:contact_app/controller/contact_controller.dart';
@@ -234,80 +238,149 @@ class FormModal extends GetView<ContactController> {
     return GetBuilder<ContactController>(
       builder: (_) {
         TextEditingController nameController = TextEditingController();
+        TextEditingController nicknameController = TextEditingController();
         TextEditingController emailController = TextEditingController();
         TextEditingController telephoneController = TextEditingController();
-        TextEditingController birthdateController = TextEditingController();
+        final keyForm = GlobalKey<FormState>();
 
         nameController.text = _.contactData['name'];
+        nicknameController.text = _.contactData['nickname'];
         emailController.text = _.contactData['email'];
         telephoneController.text = _.contactData['telephone'];
-        birthdateController.text = _.contactData['birthdate'];
 
-        return Container(
-            padding: const EdgeInsets.all(20),
-            child: Form(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+        return Form(
+          key: keyForm,
+          child: ListView(padding: const EdgeInsets.all(20), children: [
+            const Text(
+              'Editar Contato',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextFormField(
+              controller: nameController,
+              validator: const Validator().isNotEmpty(
+                  message: 'O campo de nome completo é obrigatorio'),
+              decoration: const InputDecoration(labelText: 'Nome Completo *'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: nicknameController,
+              decoration: const InputDecoration(labelText: 'Apelido'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: emailController,
+              validator: ContactValidator(const Validator()).isEmail(),
+              decoration: const InputDecoration(labelText: 'Email *'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            TextFormField(
+              controller: telephoneController,
+              inputFormatters: [
+                TextInputMask(mask: ['(99) 9999-9999', '(99) 99999-9999'])
+              ],
+              validator: ContactValidator(const Validator()).isTelephone(),
+              decoration: const InputDecoration(
+                  labelText: 'Telefone *', hintText: '(DDD) xxxx-xxxx'),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Gênero *',
+                  style: TextStyle(fontSize: 16, color: Colors.black54),
+                ),
+                GetX<ContactController>(
+                  builder: (_) {
+                    return DropdownButton(
+                      hint: const Text('Escolha o gênero'),
+                      value: _.gender.isEmpty ? null : _.gender,
+                      onChanged: (selected) => {_.gender = selected.toString()},
+                      items: ['Masculino', 'Femenino', 'Outros']
+                          .map(
+                            (option) => DropdownMenuItem(
+                              value: option,
+                              child: Text(option),
+                            ),
+                          )
+                          .toList(),
+                    );
+                  },
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            GestureDetector(
+                onTap: () async {
+                  DateTime? newDate = await showDatePicker(
+                    context: context,
+                    initialDate: _.birthdate,
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                  );
+
+                  newDate == null
+                      ? _.birthdate = DateTime(0)
+                      : _.birthdate = newDate;
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Editar Contato',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      'Data de nascimento',
+                      style: TextStyle(fontSize: 16, color: Colors.black54),
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: nameController,
-                      decoration:
-                          const InputDecoration(labelText: 'Nome Completo *'),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: emailController,
-                      decoration: const InputDecoration(labelText: 'Email *'),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: telephoneController,
-                      decoration: const InputDecoration(
-                          labelText: 'Telefone *', hintText: '(DDD) xxxx-xxxx'),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    TextFormField(
-                      controller: birthdateController,
-                      decoration: const InputDecoration(
-                          labelText: 'Data de nascimento',
-                          hintText: 'dd/mm/aaaa'),
-                    ),
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    ElevatedButton(
-                      child: const Text('Editar'),
-                      onPressed: () {
-                        if (nameController.text != '' ||
-                            emailController.text != '' ||
-                            telephoneController.text != '') {
-                          Map<String, String> contact = {
-                            'name': nameController.text,
-                            'email': emailController.text,
-                            'telephone': telephoneController.text,
-                            'birthdate': birthdateController.text,
-                          };
-                          _.editContact(contact);
-                          Navigator.pop(context);
-                        }
+                    GetX<ContactController>(
+                      builder: (_) {
+                        return Text(
+                          _.birthdate == DateTime(0)
+                              ? 'Escolha a data de nascimento'
+                              : '${_.birthdate.day}/${_.birthdate.month}/${_.birthdate.year}',
+                          style: const TextStyle(fontSize: 16),
+                        );
                       },
-                    )
-                  ]),
-            ));
+                    ),
+                  ],
+                )),
+            const SizedBox(
+              height: 40,
+            ),
+            ElevatedButton(
+              child: const Text('Editar'),
+              onPressed: () {
+                if (keyForm.currentState!.validate()) {
+                  if (_.gender != '') {
+                    Map contact = {
+                      'name': nameController.text,
+                      'nickname': nicknameController.text,
+                      'email': emailController.text,
+                      'telephone': telephoneController.text,
+                      'gender': _.gender,
+                      'birthdate': '${_.birthdate}',
+                    };
+                    _.editContact(contact);
+                    Navigator.pop(context);
+                    _.gender = '';
+                    _.birthdate = DateTime(0);
+                  }
+                }
+              },
+            )
+          ]),
+        );
       },
     );
   }
