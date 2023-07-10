@@ -12,6 +12,14 @@ class ContactController extends GetxController {
   bool isLoading = true;
   Map contactData = {};
 
+  final _gender = ''.obs;
+  get gender => _gender.value;
+  set gender(value) => _gender.value = value;
+
+  final _birthdate = DateTime(0).obs;
+  get birthdate => _birthdate.value;
+  set birthdate(value) => _birthdate.value = value;
+
   @override
   void onInit() {
     fetchData();
@@ -37,6 +45,8 @@ class ContactController extends GetxController {
     Map? res = contactBox.get(Get.arguments['key']);
     if (res != null) {
       contactData = res;
+      gender = contactData['gender'];
+      birthdate = DateTime.tryParse(contactData['birthdate']);
     }
   }
 
