@@ -12,6 +12,10 @@ class HomeController extends GetxController {
   bool isLoading = true;
   List<Map> contactList = [];
 
+  final _date = DateTime(0).obs;
+  get date => _date.value;
+  set date(value) => _date.value = value;
+
   final _image = XFile('').obs;
   get image => _image.value;
   set image(value) => _image.value = value;
