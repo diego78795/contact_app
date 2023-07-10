@@ -193,6 +193,9 @@ class FormModal extends GetView<HomeController> {
                   message: 'O campo de nome completo é obrigatorio'),
               decoration: const InputDecoration(labelText: 'Nome Completo *'),
             ),
+            const SizedBox(
+              height: 10,
+            ),
             TextFormField(
               controller: nicknameController,
               decoration: const InputDecoration(labelText: 'Apelido'),
