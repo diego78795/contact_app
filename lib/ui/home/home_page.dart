@@ -89,6 +89,7 @@ class ContactCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       builder: (_) {
+        List<String> name = contact['name'].split(' ');
         return GestureDetector(
             onTap: () => {
                   Navigator.of(context).pushNamed(Routes.contact,
@@ -126,7 +127,8 @@ class ContactCard extends StatelessWidget {
                       children: [
                         TextInfo(
                           label: 'Nome',
-                          data: contact['name'],
+                          data:
+                              '${name[0]} ${name.length - 1 != 0 ? name[name.length - 1] : ''}',
                         ),
                         const SizedBox(
                           height: 5,
