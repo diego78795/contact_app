@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_mask/easy_mask.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter_validator/flutter_validator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -209,6 +210,9 @@ class FormModal extends GetView<HomeController> {
             ),
             TextFormField(
               controller: telephoneController,
+              inputFormatters: [
+                TextInputMask(mask: ['(99) 9999-9999', '(99) 99999-9999'])
+              ],
               validator: ContactValidator(const Validator()).isTelephone(),
               decoration: const InputDecoration(
                   labelText: 'Telefone *', hintText: '(DDD) xxxx-xxxx'),
