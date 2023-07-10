@@ -114,11 +114,13 @@ class ContactCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(100),
                           color: Colors.blue,
                         ),
-                        child: const Icon(
-                          Icons.person,
-                          size: 80,
-                          color: Colors.black54,
-                        )),
+                        child: contact['image'] != ''
+                            ? Image.file(File(contact['image']))
+                            : const Icon(
+                                Icons.person,
+                                size: 80,
+                                color: Colors.black54,
+                              )),
                     const SizedBox(
                       width: 20,
                     ),
@@ -319,11 +321,13 @@ class FormModal extends GetView<HomeController> {
                       'telephone': telephoneController.text,
                       'gender': _.gender,
                       'birthdate': '${_.birthdate}',
+                      'image': _.image.path
                     };
                     _.addContact(contact);
                     Navigator.pop(context);
                     _.gender = '';
                     _.birthdate = DateTime(0);
+                    _.image = XFile('');
                   }
                 }
               },
