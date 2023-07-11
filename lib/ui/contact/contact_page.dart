@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:easy_mask/easy_mask.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+
+import 'package:easy_mask/easy_mask.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter_validator/flutter_validator.dart';
-
-import 'package:contact_app/extensions/validator/contact_validator.dart';
-
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:contact_app/controller/contact_controller.dart';
+import 'package:contact_app/extensions/validator/contact_validator.dart';
 
 class ContactPage extends GetView<ContactController> {
   const ContactPage({super.key});
@@ -365,6 +365,26 @@ class FormModal extends GetView<ContactController> {
                   ],
                 )),
             const SizedBox(
+              height: 20,
+            ),
+            GestureDetector(
+              onTap: () async {
+                _.image =
+                    await ImagePicker().pickImage(source: ImageSource.gallery);
+              },
+              child: Container(
+                height: 200,
+                decoration: BoxDecoration(border: Border.all()),
+                child: GetX<ContactController>(
+                  builder: (_) {
+                    return _.image.path != ''
+                        ? Image.file(File(_.image.path))
+                        : const Icon(Icons.photo);
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(
               height: 40,
             ),
             ElevatedButton(
@@ -379,6 +399,7 @@ class FormModal extends GetView<ContactController> {
                       'telephone': telephoneController.text,
                       'gender': _.gender,
                       'birthdate': '${_.birthdate}',
+                      'image': _.image.path
                     };
                     _.editContact(contact);
                     Navigator.pop(context);
