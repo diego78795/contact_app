@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:image_picker/image_picker.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -19,6 +20,10 @@ class ContactController extends GetxController {
   final _birthdate = DateTime(0).obs;
   get birthdate => _birthdate.value;
   set birthdate(value) => _birthdate.value = value;
+
+  final _image = XFile('').obs;
+  get image => _image.value;
+  set image(value) => _image.value = value;
 
   @override
   void onInit() {
@@ -47,6 +52,7 @@ class ContactController extends GetxController {
       contactData = res;
       gender = contactData['gender'];
       birthdate = DateTime.tryParse(contactData['birthdate']);
+      image = XFile(contactData['image']);
     }
   }
 
