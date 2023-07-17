@@ -26,10 +26,7 @@ class HomePage extends GetView<HomeController> {
           children: [
             const Align(alignment: Alignment.topRight, child: AddButton()),
             _.isLoading
-                ? Center(child: Container()
-                    //CircularProgressIndicator()
-
-                    )
+                ? const Center(child: CircularProgressIndicator())
                 : ListView.separated(
                     padding: const EdgeInsets.symmetric(vertical: 20),
                     shrinkWrap: true,

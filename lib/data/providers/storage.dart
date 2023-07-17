@@ -8,9 +8,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class StorageClient {
-  StorageClient() {
-    initStorage();
-  }
+  StorageClient();
 
   Box<ContactModel>? contactBox;
 
@@ -34,6 +32,7 @@ class StorageClient {
   }
 
   Future<List<ContactModel>> storageGetContacts() async {
+    await initStorage();
     List<ContactModel> contactList = [];
 
     for (int i = 0; i < contactBox!.length; i++) {
