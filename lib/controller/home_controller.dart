@@ -12,6 +12,14 @@ class HomeController extends GetxController {
   bool isLoading = true;
   List<Map> contactList = [];
 
+  final _gender = ''.obs;
+  get gender => _gender.value;
+  set gender(value) => _gender.value = value;
+
+  final _birthdate = DateTime(0).obs;
+  get birthdate => _birthdate.value;
+  set birthdate(value) => _birthdate.value = value;
+
   final _image = XFile('').obs;
   get image => _image.value;
   set image(value) => _image.value = value;

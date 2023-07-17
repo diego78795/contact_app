@@ -57,6 +57,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  easy_mask:
+    dependency: "direct main"
+    description:
+      name: easy_mask
+      sha256: be5e8c5e25a25f840e5679c6ad3f79602898783b6df4d97583c2d462f4757b1a
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -187,6 +195,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_validator:
+    dependency: "direct main"
+    description:
+      name: flutter_validator
+      sha256: c295dc27f66497f42f680e1a7199cc91f5e63493e5ff78183d1a51fea7270cae
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0+2"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
