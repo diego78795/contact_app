@@ -26,13 +26,14 @@ class StorageClient {
     final Uint8List decodeKey = base64Url.decode(key!);
     HiveAesCipher cipher = HiveAesCipher(decodeKey);
 
-    Hive.registerAdapter(ContactHiveAdapter());
+    if (!Hive.isAdapterRegistered(0)) {
+      Hive.registerAdapter(ContactHiveAdapter());
+    }
     contactBox = await Hive.openBox<ContactModel>('contactList',
         encryptionCipher: cipher);
   }
 
   Future<List<ContactModel>> storageGetContacts() async {
-    await initStorage();
     List<ContactModel> contactList = [];
 
     for (int i = 0; i < contactBox!.length; i++) {
@@ -44,5 +45,17 @@ class StorageClient {
 
   Future storageAddContact(ContactModel contact) async {
     await contactBox!.put('${contactBox!.length}', contact);
+  }
+
+  Future<ContactModel?> storageGetSingleContact(String key) async {
+    return contactBox!.get(key);
+  }
+
+  Future storageEditContact(String key, ContactModel contact) async {
+    return await contactBox!.put(key, contact);
+  }
+
+  Future storageDeleteContact(String key) async {
+    return await contactBox!.delete(key);
   }
 }
