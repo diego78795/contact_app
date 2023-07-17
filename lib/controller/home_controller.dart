@@ -34,9 +34,14 @@ class HomeController extends GetxController {
   }
 
   fetchData() async {
+    await initStorage();
     await getContacts();
     isLoading = false;
     update();
+  }
+
+  Future<void> initStorage() async {
+    await contactRepository?.initStorage();
   }
 
   Future<void> getContacts() async {
