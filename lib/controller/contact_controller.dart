@@ -1,17 +1,27 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter/foundation.dart';
+
+import 'package:contact_app/data/model/contact_model.dart';
+import 'package:contact_app/data/repository/contact_repository.dart';
 
 import 'package:image_picker/image_picker.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ContactController extends GetxController {
-  ContactController();
+  final ContactRepository? contactRepository;
+  ContactController({@required this.contactRepository})
+      : assert(contactRepository != null);
+
+  final String keyContact = Get.arguments['key'];
 
   bool isLoading = true;
-  Map contactData = {};
+  ContactModel contactData = ContactModel(
+      name: '',
+      nickname: '',
+      email: '',
+      telephone: '',
+      gender: '',
+      birthdate: '',
+      image: '');
 
   final _gender = ''.obs;
   get gender => _gender.value;
@@ -26,49 +36,38 @@ class ContactController extends GetxController {
   set image(value) => _image.value = value;
 
   @override
-  void onInit() {
-    fetchData();
+  void onInit() async {
+    await fetchData();
     super.onInit();
   }
 
   fetchData() async {
     await initStorage();
+    await getSingleContact();
     isLoading = false;
     update();
   }
 
   Future<void> initStorage() async {
-    const FlutterSecureStorage secureStorage = FlutterSecureStorage();
+    await contactRepository?.initStorage();
+  }
 
-    final String? key = await secureStorage.read(key: 'key');
-    final Uint8List decodeKey = base64Url.decode(key!);
-    HiveAesCipher cipher = HiveAesCipher(decodeKey);
+  Future<void> getSingleContact() async {
+    ContactModel? res = await contactRepository?.getSingleContact(keyContact);
 
-    final Box<Map> contactBox =
-        await Hive.openBox<Map>('contactList', encryptionCipher: cipher);
-
-    Map? res = contactBox.get(Get.arguments['key']);
     if (res != null) {
       contactData = res;
-      gender = contactData['gender'];
-      birthdate = DateTime.tryParse(contactData['birthdate']);
-      image = XFile(contactData['image']);
+      gender = contactData.gender;
+      birthdate = DateTime.tryParse(contactData.birthdate);
+      image = XFile(contactData.image);
     }
   }
 
-  Future<void> editContact(Map contact) async {
+  Future<void> editContact(ContactModel contact) async {
     isLoading = true;
     update();
-    const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-    final String? key = await secureStorage.read(key: 'key');
-    final Uint8List decodeKey = base64Url.decode(key!);
-    HiveAesCipher cipher = HiveAesCipher(decodeKey);
-
-    final Box<Map> contactBox =
-        await Hive.openBox<Map>('contactList', encryptionCipher: cipher);
-
-    await contactBox.put(Get.arguments['key'], contact);
+    await contactRepository?.editContact(keyContact, contact);
 
     contactData = contact;
     isLoading = false;
@@ -78,16 +77,8 @@ class ContactController extends GetxController {
   Future<void> deleteContact(BuildContext context) async {
     isLoading = true;
     update();
-    const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-    final String? key = await secureStorage.read(key: 'key');
-    final Uint8List decodeKey = base64Url.decode(key!);
-    HiveAesCipher cipher = HiveAesCipher(decodeKey);
-
-    final Box<Map> contactBox =
-        await Hive.openBox<Map>('contactList', encryptionCipher: cipher);
-
-    await contactBox.delete(Get.arguments['key']).then((value) {
+    await contactRepository?.deleteContact(keyContact).then((value) {
       Navigator.pop(context, true);
     });
   }
