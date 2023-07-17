@@ -144,7 +144,7 @@ class BackButton extends GetView<ContactController> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => {Navigator.pop(context, true)},
+      onPressed: () => {Get.back(result: true)},
       style: ButtonStyle(
           side: const MaterialStatePropertyAll<BorderSide>(
               BorderSide(width: 1, color: Color.fromRGBO(250, 250, 250, 1))),
@@ -403,7 +403,7 @@ class FormModal extends GetView<ContactController> {
                         birthdate: '${_.birthdate}',
                         image: _.image.path);
                     _.editContact(contact);
-                    Navigator.pop(context);
+                    Get.back();
                     _.gender = '';
                     _.birthdate = DateTime(0);
                   }

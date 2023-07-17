@@ -94,8 +94,8 @@ class ContactCard extends StatelessWidget {
         List<String> name = contact.name.split(' ');
         return GestureDetector(
             onTap: () => {
-                  Navigator.of(context).pushNamed(Routes.contact,
-                      arguments: {'key': '$keyContact'}).then((result) {
+                  Get.toNamed(Routes.contact, arguments: {'key': '$keyContact'})
+                      ?.then((result) {
                     if (result != null) {
                       _.fetchData();
                     }
@@ -328,7 +328,7 @@ class FormModal extends GetView<HomeController> {
                         birthdate: '${_.birthdate}',
                         image: _.image.path);
                     _.addContact(contact);
-                    Navigator.pop(context);
+                    Get.back();
                     _.gender = '';
                     _.birthdate = DateTime(0);
                     _.image = XFile('');

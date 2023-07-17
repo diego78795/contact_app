@@ -79,7 +79,7 @@ class ContactController extends GetxController {
     update();
 
     await contactRepository?.deleteContact(keyContact).then((value) {
-      Navigator.pop(context, true);
+      Get.back(result: true);
     });
   }
 }
