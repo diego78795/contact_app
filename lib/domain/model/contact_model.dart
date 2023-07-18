@@ -1,18 +1,19 @@
 class ContactModel {
-  String name = '';
-  String nickname = '';
-  String email = '';
-  String telephone = '';
-  String gender = '';
-  String birthdate = '';
-  String image = '';
+  final String name;
+  final String nickname;
+  final String email;
+  final String telephone;
+  final String gender;
+  final String birthdate;
+  final String image;
 
   ContactModel(
-      {required name,
-      required nickname,
-      required email,
-      required telephone,
-      required gender,
-      required birthdate,
-      required image});
+    this.name,
+    this.nickname,
+    this.email,
+    this.telephone,
+    this.gender,
+    this.birthdate,
+    this.image,
+  );
 }

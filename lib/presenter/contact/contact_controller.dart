@@ -15,14 +15,7 @@ class ContactController extends GetxController {
   final String keyContact = Get.arguments['key'];
 
   bool isLoading = true;
-  ContactModel contactData = ContactModel(
-      name: '',
-      nickname: '',
-      email: '',
-      telephone: '',
-      gender: '',
-      birthdate: '',
-      image: '');
+  ContactModel contactData = ContactModel('', '', '', '', '', '', '');
 
   final _gender = ''.obs;
   get gender => _gender.value;

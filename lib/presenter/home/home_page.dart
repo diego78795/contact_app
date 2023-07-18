@@ -319,13 +319,13 @@ class FormModal extends GetView<HomeController> {
                 if (keyForm.currentState!.validate()) {
                   if (_.gender != '') {
                     ContactModel contact = ContactModel(
-                        name: nameController.text,
-                        nickname: nicknameController.text,
-                        email: emailController.text,
-                        telephone: telephoneController.text,
-                        gender: _.gender,
-                        birthdate: '${_.birthdate}',
-                        image: _.image.path);
+                        nameController.text,
+                        nicknameController.text,
+                        emailController.text,
+                        telephoneController.text,
+                        _.gender,
+                        '${_.birthdate}',
+                        _.image.path);
                     _.addContact(contact);
                     Get.back();
                     _.gender = '';
