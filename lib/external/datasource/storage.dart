@@ -1,17 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
-import 'package:contact_app/data/model/contact_model.dart';
+import 'package:contact_app/domain/model/contact_model.dart';
+import 'package:contact_app/infra/datasource/storage_abs.dart';
 import 'package:contact_app/adapters/contact_hive_adapter.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class StorageClient {
+class StorageClient implements StorageClientAbs {
   StorageClient();
 
   Box<ContactModel>? contactBox;
 
+  @override
   Future initStorage() async {
     await Hive.initFlutter();
 
@@ -33,6 +35,7 @@ class StorageClient {
         encryptionCipher: cipher);
   }
 
+  @override
   Future<List<ContactModel>> storageGetContacts() async {
     List<ContactModel> contactList = [];
 
@@ -43,18 +46,22 @@ class StorageClient {
     return contactList;
   }
 
+  @override
   Future storageAddContact(ContactModel contact) async {
     await contactBox!.put('${contactBox!.length}', contact);
   }
 
+  @override
   Future<ContactModel?> storageGetSingleContact(String key) async {
     return contactBox!.get(key);
   }
 
+  @override
   Future storageEditContact(String key, ContactModel contact) async {
     return await contactBox!.put(key, contact);
   }
 
+  @override
   Future storageDeleteContact(String key) async {
     return await contactBox!.delete(key);
   }
