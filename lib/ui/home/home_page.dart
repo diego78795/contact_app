@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_mask/easy_mask.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_validator/flutter_validator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import 'package:contact_app/adapters/image_adapter.dart';
 import 'package:contact_app/data/model/contact_model.dart';
 import 'package:contact_app/extensions/validator/contact_validator.dart';
 
@@ -296,8 +296,7 @@ class FormModal extends GetView<HomeController> {
             ),
             GestureDetector(
               onTap: () async {
-                _.image =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                _.image = await ImageAdapter.fetchImageFromGallery();
               },
               child: Container(
                 height: 200,
@@ -331,7 +330,7 @@ class FormModal extends GetView<HomeController> {
                     Get.back();
                     _.gender = '';
                     _.birthdate = DateTime(0);
-                    _.image = XFile('');
+                    _.image = ImageAdapter('');
                   }
                 }
               },

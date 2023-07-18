@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 
 import 'package:contact_app/data/model/contact_model.dart';
 import 'package:contact_app/controller/contact_controller.dart';
+import 'package:contact_app/adapters/image_adapter.dart';
 import 'package:contact_app/extensions/validator/contact_validator.dart';
 
 import 'package:easy_mask/easy_mask.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_validator/flutter_validator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
@@ -371,8 +371,7 @@ class FormModal extends GetView<ContactController> {
             ),
             GestureDetector(
               onTap: () async {
-                _.image =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                _.image = await ImageAdapter.fetchImageFromGallery();
               },
               child: Container(
                 height: 200,

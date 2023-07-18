@@ -1,10 +1,9 @@
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:contact_app/adapters/image_adapter.dart';
 import 'package:contact_app/data/model/contact_model.dart';
 import 'package:contact_app/data/repository/contact_repository.dart';
-
-import 'package:image_picker/image_picker.dart';
 
 class HomeController extends GetxController {
   final ContactRepository? contactRepository;
@@ -23,7 +22,7 @@ class HomeController extends GetxController {
   get birthdate => _birthdate.value;
   set birthdate(value) => _birthdate.value = value;
 
-  final _image = XFile('').obs;
+  final _image = ImageAdapter('').obs;
   get image => _image.value;
   set image(value) => _image.value = value;
 
