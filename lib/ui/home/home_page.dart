@@ -7,7 +7,7 @@ import 'package:flutter_validator/flutter_validator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:contact_app/adapters/image_adapter.dart';
-import 'package:contact_app/data/model/contact_model.dart';
+import 'package:contact_app/domain/model/contact_model.dart';
 import 'package:contact_app/extensions/validator/contact_validator.dart';
 
 import 'package:contact_app/routes/app_pages.dart';
