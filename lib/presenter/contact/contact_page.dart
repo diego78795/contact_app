@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
 import 'package:contact_app/domain/model/contact_model.dart';
-import 'package:contact_app/controller/contact_controller.dart';
+import 'package:contact_app/presenter/contact/contact_controller.dart';
 import 'package:contact_app/adapters/image_adapter.dart';
 import 'package:contact_app/extensions/validator/contact_validator.dart';
 

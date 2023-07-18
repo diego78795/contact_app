@@ -11,7 +11,7 @@ import 'package:contact_app/domain/model/contact_model.dart';
 import 'package:contact_app/extensions/validator/contact_validator.dart';
 
 import 'package:contact_app/routes/app_pages.dart';
-import 'package:contact_app/controller/home_controller.dart';
+import 'package:contact_app/presenter/home/home_controller.dart';
 
 class HomePage extends GetView<HomeController> {
   const HomePage({super.key});

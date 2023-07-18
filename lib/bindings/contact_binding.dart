@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import 'package:contact_app/external/datasource/storage.dart';
-import 'package:contact_app/controller/contact_controller.dart';
+import 'package:contact_app/presenter/contact/contact_controller.dart';
 import 'package:contact_app/infra/repository/contact_repository.dart';
 
 import 'package:contact_app/domain/usecase/edit_contact.dart';
