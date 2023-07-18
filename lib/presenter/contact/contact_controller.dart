@@ -4,23 +4,13 @@ import 'package:get/get.dart';
 import 'package:contact_app/adapters/image_adapter.dart';
 import 'package:contact_app/domain/model/contact_model.dart';
 
-import 'package:contact_app/domain/usecase/edit_contact.dart';
-import 'package:contact_app/domain/usecase/init_storage.dart';
-import 'package:contact_app/domain/usecase/delete_contact.dart';
-import 'package:contact_app/domain/usecase/get_single_contact.dart';
+import 'package:contact_app/domain/usecase/contact_cases.dart';
 
 class ContactController extends GetxController {
-  final InitStorage? initStorageCase;
-  final GetSingleContact? getSingleContactCase;
-  final EditContact? editContactCase;
-  final DeleteContact? deleteContactCase;
+  final ContactCases? contactCases;
 
-  ContactController(
-      {@required this.initStorageCase,
-      @required this.getSingleContactCase,
-      @required this.editContactCase,
-      @required this.deleteContactCase})
-      : assert(initStorageCase != null, getSingleContactCase != null);
+  ContactController({@required this.contactCases})
+      : assert(contactCases != null);
 
   final String keyContact = Get.arguments['key'];
 
@@ -60,11 +50,11 @@ class ContactController extends GetxController {
   }
 
   Future<void> initStorage() async {
-    await initStorageCase!();
+    await contactCases!.initStorage();
   }
 
   Future<void> getSingleContact() async {
-    ContactModel? res = await getSingleContactCase!(keyContact);
+    ContactModel? res = await contactCases!.getSingleContact(keyContact);
 
     if (res != null) {
       contactData = res;
@@ -78,7 +68,7 @@ class ContactController extends GetxController {
     isLoading = true;
     update();
 
-    await editContactCase!(keyContact, contact);
+    await contactCases!.editContact(keyContact, contact);
 
     contactData = contact;
     isLoading = false;
@@ -89,7 +79,7 @@ class ContactController extends GetxController {
     isLoading = true;
     update();
 
-    await deleteContactCase!(keyContact).then((value) {
+    await contactCases!.deleteContact(keyContact).then((value) {
       Get.back(result: true);
     });
   }
