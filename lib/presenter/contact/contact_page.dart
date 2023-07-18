@@ -287,7 +287,7 @@ class FormModal extends GetView<ContactController> {
             ),
             TextFormField(
               controller: emailController,
-              validator: ContactValidator(const Validator()).isEmail(),
+              validator: const Validator().isEmail(),
               decoration: const InputDecoration(labelText: 'Email *'),
             ),
             const SizedBox(
@@ -298,7 +298,7 @@ class FormModal extends GetView<ContactController> {
               inputFormatters: [
                 TextInputMask(mask: ['(99) 9999-9999', '(99) 99999-9999'])
               ],
-              validator: ContactValidator(const Validator()).isTelephone(),
+              validator: const Validator().isTelephone(),
               decoration: const InputDecoration(
                   labelText: 'Telefone *', hintText: '(DDD) xxxx-xxxx'),
             ),
