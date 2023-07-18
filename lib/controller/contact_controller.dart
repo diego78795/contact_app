@@ -2,13 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:contact_app/adapters/image_adapter.dart';
-import 'package:contact_app/data/model/contact_model.dart';
-import 'package:contact_app/data/repository/contact_repository.dart';
+import 'package:contact_app/domain/model/contact_model.dart';
+
+import 'package:contact_app/domain/usecase/edit_contact.dart';
+import 'package:contact_app/domain/usecase/init_storage.dart';
+import 'package:contact_app/domain/usecase/delete_contact.dart';
+import 'package:contact_app/domain/usecase/get_single_contact.dart';
 
 class ContactController extends GetxController {
-  final ContactRepository? contactRepository;
-  ContactController({@required this.contactRepository})
-      : assert(contactRepository != null);
+  final InitStorage? initStorageCase;
+  final GetSingleContact? getSingleContactCase;
+  final EditContact? editContactCase;
+  final DeleteContact? deleteContactCase;
+
+  ContactController(
+      {@required this.initStorageCase,
+      @required this.getSingleContactCase,
+      @required this.editContactCase,
+      @required this.deleteContactCase})
+      : assert(initStorageCase != null, getSingleContactCase != null);
 
   final String keyContact = Get.arguments['key'];
 
@@ -48,11 +60,11 @@ class ContactController extends GetxController {
   }
 
   Future<void> initStorage() async {
-    await contactRepository?.initStorage();
+    await initStorageCase!();
   }
 
   Future<void> getSingleContact() async {
-    ContactModel? res = await contactRepository?.getSingleContact(keyContact);
+    ContactModel? res = await getSingleContactCase!(keyContact);
 
     if (res != null) {
       contactData = res;
@@ -66,7 +78,7 @@ class ContactController extends GetxController {
     isLoading = true;
     update();
 
-    await contactRepository?.editContact(keyContact, contact);
+    await editContactCase!(keyContact, contact);
 
     contactData = contact;
     isLoading = false;
@@ -77,7 +89,7 @@ class ContactController extends GetxController {
     isLoading = true;
     update();
 
-    await contactRepository?.deleteContact(keyContact).then((value) {
+    await deleteContactCase!(keyContact).then((value) {
       Get.back(result: true);
     });
   }
