@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
+import 'package:contact_app/data/model/contact_model.dart';
+import 'package:contact_app/controller/contact_controller.dart';
+import 'package:contact_app/adapters/image_adapter.dart';
+import 'package:contact_app/extensions/validator/contact_validator.dart';
+
 import 'package:easy_mask/easy_mask.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_validator/flutter_validator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:contact_app/controller/contact_controller.dart';
-import 'package:contact_app/extensions/validator/contact_validator.dart';
 
 class ContactPage extends GetView<ContactController> {
   const ContactPage({super.key});
@@ -17,7 +19,7 @@ class ContactPage extends GetView<ContactController> {
   Widget build(BuildContext context) {
     return Scaffold(body: GetBuilder<ContactController>(builder: (_) {
       List<String> birthdate =
-          _.contactData['birthdate'].substring(0, 10).split('-');
+          _.contactData.birthdate.substring(0, 10).split('-');
       return SafeArea(
           child: ListView(
         padding: const EdgeInsets.all(20),
@@ -38,13 +40,13 @@ class ContactPage extends GetView<ContactController> {
                             borderRadius: BorderRadius.circular(100),
                             color: Colors.blue,
                           ),
-                          child: _.contactData['image'] != ''
+                          child: _.contactData.image != ''
                               ? FittedBox(
                                   fit: BoxFit.fill,
                                   child: ClipRRect(
                                       borderRadius: BorderRadius.circular(1000),
                                       child: Image.file(
-                                          File(_.contactData['image']))))
+                                          File(_.contactData.image))))
                               : const Icon(
                                   Icons.person,
                                   size: 200,
@@ -62,32 +64,32 @@ class ContactPage extends GetView<ContactController> {
                     const SizedBox(height: 20),
                     TextInfo(
                       label: 'Nome',
-                      data: _.contactData['name'],
+                      data: _.contactData.name,
                     ),
                     const SizedBox(height: 10),
                     TextInfo(
                       label: 'Apelido',
-                      data: _.contactData['nickname'],
+                      data: _.contactData.nickname,
                     ),
                     const SizedBox(height: 10),
                     TextInfo(
                       label: 'Email',
-                      data: _.contactData['email'],
+                      data: _.contactData.email,
                     ),
                     const SizedBox(height: 10),
                     TextInfo(
                       label: 'Telefone',
-                      data: _.contactData['telephone'],
+                      data: _.contactData.telephone,
                     ),
                     const SizedBox(height: 10),
                     TextInfo(
                       label: 'Gênero',
-                      data: _.contactData['gender'],
+                      data: _.contactData.gender,
                     ),
                     const SizedBox(height: 10),
                     TextInfo(
                       label: 'Data de nascimento',
-                      data: _.contactData['birthdate'] != '${DateTime(0)}'
+                      data: _.contactData.birthdate != '${DateTime(0)}'
                           ? '${birthdate[2]}/${birthdate[1]}/${birthdate[0]}'
                           : '-',
                     ),
@@ -142,7 +144,7 @@ class BackButton extends GetView<ContactController> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => {Navigator.pop(context, true)},
+      onPressed: () => {Get.back(result: true)},
       style: ButtonStyle(
           side: const MaterialStatePropertyAll<BorderSide>(
               BorderSide(width: 1, color: Color.fromRGBO(250, 250, 250, 1))),
@@ -252,10 +254,10 @@ class FormModal extends GetView<ContactController> {
         TextEditingController telephoneController = TextEditingController();
         final keyForm = GlobalKey<FormState>();
 
-        nameController.text = _.contactData['name'];
-        nicknameController.text = _.contactData['nickname'];
-        emailController.text = _.contactData['email'];
-        telephoneController.text = _.contactData['telephone'];
+        nameController.text = _.contactData.name;
+        nicknameController.text = _.contactData.nickname;
+        emailController.text = _.contactData.email;
+        telephoneController.text = _.contactData.telephone;
 
         return Form(
           key: keyForm,
@@ -369,8 +371,7 @@ class FormModal extends GetView<ContactController> {
             ),
             GestureDetector(
               onTap: () async {
-                _.image =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                _.image = await ImageAdapter.fetchImageFromGallery();
               },
               child: Container(
                 height: 200,
@@ -392,17 +393,16 @@ class FormModal extends GetView<ContactController> {
               onPressed: () {
                 if (keyForm.currentState!.validate()) {
                   if (_.gender != '') {
-                    Map contact = {
-                      'name': nameController.text,
-                      'nickname': nicknameController.text,
-                      'email': emailController.text,
-                      'telephone': telephoneController.text,
-                      'gender': _.gender,
-                      'birthdate': '${_.birthdate}',
-                      'image': _.image.path
-                    };
+                    ContactModel contact = ContactModel(
+                        name: nameController.text,
+                        nickname: nicknameController.text,
+                        email: emailController.text,
+                        telephone: telephoneController.text,
+                        gender: _.gender,
+                        birthdate: '${_.birthdate}',
+                        image: _.image.path);
                     _.editContact(contact);
-                    Navigator.pop(context);
+                    Get.back();
                     _.gender = '';
                     _.birthdate = DateTime(0);
                   }

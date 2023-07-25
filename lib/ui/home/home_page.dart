@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_mask/easy_mask.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter_validator/flutter_validator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
+import 'package:contact_app/adapters/image_adapter.dart';
+import 'package:contact_app/data/model/contact_model.dart';
 import 'package:contact_app/extensions/validator/contact_validator.dart';
 
 import 'package:contact_app/routes/app_pages.dart';
@@ -84,17 +85,17 @@ class ContactCard extends StatelessWidget {
       {super.key, required this.contact, required this.keyContact});
 
   final int keyContact;
-  final Map contact;
+  final ContactModel contact;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       builder: (_) {
-        List<String> name = contact['name'].split(' ');
+        List<String> name = contact.name.split(' ');
         return GestureDetector(
             onTap: () => {
-                  Navigator.of(context).pushNamed(Routes.contact,
-                      arguments: {'key': '$keyContact'}).then((result) {
+                  Get.toNamed(Routes.contact, arguments: {'key': '$keyContact'})
+                      ?.then((result) {
                     if (result != null) {
                       _.fetchData();
                     }
@@ -114,12 +115,12 @@ class ContactCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(100),
                           color: Colors.blue,
                         ),
-                        child: contact['image'] != ''
+                        child: contact.image != ''
                             ? FittedBox(
                                 fit: BoxFit.fill,
                                 child: ClipRRect(
                                     borderRadius: BorderRadius.circular(1000),
-                                    child: Image.file(File(contact['image']))))
+                                    child: Image.file(File(contact.image))))
                             : const Icon(
                                 Icons.person,
                                 size: 80,
@@ -142,7 +143,7 @@ class ContactCard extends StatelessWidget {
                         ),
                         TextInfo(
                           label: 'Telefone',
-                          data: contact['telephone'],
+                          data: contact.telephone,
                         )
                       ],
                     )
@@ -295,8 +296,7 @@ class FormModal extends GetView<HomeController> {
             ),
             GestureDetector(
               onTap: () async {
-                _.image =
-                    await ImagePicker().pickImage(source: ImageSource.gallery);
+                _.image = await ImageAdapter.fetchImageFromGallery();
               },
               child: Container(
                 height: 200,
@@ -318,20 +318,19 @@ class FormModal extends GetView<HomeController> {
               onPressed: () {
                 if (keyForm.currentState!.validate()) {
                   if (_.gender != '') {
-                    Map contact = {
-                      'name': nameController.text,
-                      'nickname': nicknameController.text,
-                      'email': emailController.text,
-                      'telephone': telephoneController.text,
-                      'gender': _.gender,
-                      'birthdate': '${_.birthdate}',
-                      'image': _.image.path
-                    };
+                    ContactModel contact = ContactModel(
+                        name: nameController.text,
+                        nickname: nicknameController.text,
+                        email: emailController.text,
+                        telephone: telephoneController.text,
+                        gender: _.gender,
+                        birthdate: '${_.birthdate}',
+                        image: _.image.path);
                     _.addContact(contact);
-                    Navigator.pop(context);
+                    Get.back();
                     _.gender = '';
                     _.birthdate = DateTime(0);
-                    _.image = XFile('');
+                    _.image = ImageAdapter('');
                   }
                 }
               },

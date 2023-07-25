@@ -1,16 +1,18 @@
-import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:contact_app/adapters/image_adapter.dart';
+import 'package:contact_app/data/model/contact_model.dart';
+import 'package:contact_app/data/repository/contact_repository.dart';
 
 class HomeController extends GetxController {
-  HomeController();
+  final ContactRepository? contactRepository;
+
+  HomeController({@required this.contactRepository})
+      : assert(contactRepository != null);
 
   bool isLoading = true;
-  List<Map> contactList = [];
+  List<ContactModel> contactList = [];
 
   final _gender = ''.obs;
   get gender => _gender.value;
@@ -20,7 +22,7 @@ class HomeController extends GetxController {
   get birthdate => _birthdate.value;
   set birthdate(value) => _birthdate.value = value;
 
-  final _image = XFile('').obs;
+  final _image = ImageAdapter('').obs;
   get image => _image.value;
   set image(value) => _image.value = value;
 
@@ -32,46 +34,24 @@ class HomeController extends GetxController {
 
   fetchData() async {
     await initStorage();
+    await getContacts();
     isLoading = false;
     update();
   }
 
   Future<void> initStorage() async {
-    contactList = [];
-    await Hive.initFlutter();
-
-    const FlutterSecureStorage secureStorage = FlutterSecureStorage();
-    final String? verificationKey = await secureStorage.read(key: 'key');
-    if (verificationKey == null) {
-      final List<int> key = Hive.generateSecureKey();
-      await secureStorage.write(key: 'key', value: base64UrlEncode(key));
-    }
-
-    final String? key = await secureStorage.read(key: 'key');
-    final Uint8List decodeKey = base64Url.decode(key!);
-    HiveAesCipher cipher = HiveAesCipher(decodeKey);
-
-    final Box<Map> contactBox =
-        await Hive.openBox<Map>('contactList', encryptionCipher: cipher);
-
-    for (int i = 0; i < contactBox.length; i++) {
-      contactList.add(contactBox.getAt(i)!);
-    }
+    await contactRepository?.initStorage();
   }
 
-  Future<void> addContact(Map contact) async {
+  Future<void> getContacts() async {
+    contactList = [];
+    contactList = await contactRepository?.getContacts();
+  }
+
+  Future<void> addContact(ContactModel contact) async {
     isLoading = true;
     update();
-    const FlutterSecureStorage secureStorage = FlutterSecureStorage();
-
-    final String? key = await secureStorage.read(key: 'key');
-    final Uint8List decodeKey = base64Url.decode(key!);
-    HiveAesCipher cipher = HiveAesCipher(decodeKey);
-
-    final Box<Map> contactBox =
-        await Hive.openBox<Map>('contactList', encryptionCipher: cipher);
-
-    await contactBox.put('${contactBox.length}', contact);
+    await contactRepository?.addContact(contact);
 
     contactList.add(contact);
     isLoading = false;
