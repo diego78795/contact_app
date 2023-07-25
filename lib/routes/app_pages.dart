@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:contact_app/ui/home/home_page.dart';
+import 'package:contact_app/presenter/home/home_page.dart';
 import 'package:contact_app/bindings/home_binding.dart';
 
-import 'package:contact_app/ui/contact/contact_page.dart';
+import 'package:contact_app/presenter/contact/contact_page.dart';
 import 'package:contact_app/bindings/contact_binding.dart';
 
 part './app_routes.dart';

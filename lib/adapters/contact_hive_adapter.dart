@@ -1,4 +1,4 @@
-import 'package:contact_app/data/model/contact_model.dart';
+import 'package:contact_app/domain/model/contact_model.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -9,13 +9,13 @@ class ContactHiveAdapter extends TypeAdapter<ContactModel> {
   @override
   ContactModel read(BinaryReader reader) {
     return ContactModel(
-      name: reader.readString(),
-      nickname: reader.readString(),
-      email: reader.readString(),
-      telephone: reader.readString(),
-      gender: reader.readString(),
-      birthdate: reader.readString(),
-      image: reader.readString(),
+      reader.readString(),
+      reader.readString(),
+      reader.readString(),
+      reader.readString(),
+      reader.readString(),
+      reader.readString(),
+      reader.readString(),
     );
   }
 

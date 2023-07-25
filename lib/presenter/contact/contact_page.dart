@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import 'package:contact_app/data/model/contact_model.dart';
-import 'package:contact_app/controller/contact_controller.dart';
+import 'package:contact_app/domain/model/contact_model.dart';
+import 'package:contact_app/presenter/contact/contact_controller.dart';
 import 'package:contact_app/adapters/image_adapter.dart';
 import 'package:contact_app/extensions/validator/contact_validator.dart';
 
@@ -287,7 +287,7 @@ class FormModal extends GetView<ContactController> {
             ),
             TextFormField(
               controller: emailController,
-              validator: ContactValidator(const Validator()).isEmail(),
+              validator: const Validator().isEmail(),
               decoration: const InputDecoration(labelText: 'Email *'),
             ),
             const SizedBox(
@@ -298,7 +298,7 @@ class FormModal extends GetView<ContactController> {
               inputFormatters: [
                 TextInputMask(mask: ['(99) 9999-9999', '(99) 99999-9999'])
               ],
-              validator: ContactValidator(const Validator()).isTelephone(),
+              validator: const Validator().isTelephone(),
               decoration: const InputDecoration(
                   labelText: 'Telefone *', hintText: '(DDD) xxxx-xxxx'),
             ),
@@ -394,13 +394,13 @@ class FormModal extends GetView<ContactController> {
                 if (keyForm.currentState!.validate()) {
                   if (_.gender != '') {
                     ContactModel contact = ContactModel(
-                        name: nameController.text,
-                        nickname: nicknameController.text,
-                        email: emailController.text,
-                        telephone: telephoneController.text,
-                        gender: _.gender,
-                        birthdate: '${_.birthdate}',
-                        image: _.image.path);
+                        nameController.text,
+                        nicknameController.text,
+                        emailController.text,
+                        telephoneController.text,
+                        _.gender,
+                        '${_.birthdate}',
+                        _.image.path);
                     _.editContact(contact);
                     Get.back();
                     _.gender = '';

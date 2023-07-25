@@ -2,14 +2,16 @@ import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:contact_app/adapters/image_adapter.dart';
-import 'package:contact_app/data/model/contact_model.dart';
-import 'package:contact_app/data/repository/contact_repository.dart';
+import 'package:contact_app/domain/model/contact_model.dart';
+
+import 'package:contact_app/domain/usecase/contact_cases.dart';
 
 class HomeController extends GetxController {
-  final ContactRepository? contactRepository;
+  final ContactCases? contactCases;
 
-  HomeController({@required this.contactRepository})
-      : assert(contactRepository != null);
+  HomeController({
+    @required this.contactCases,
+  }) : assert(contactCases != null);
 
   bool isLoading = true;
   List<ContactModel> contactList = [];
@@ -40,18 +42,18 @@ class HomeController extends GetxController {
   }
 
   Future<void> initStorage() async {
-    await contactRepository?.initStorage();
+    await contactCases!.initStorage();
   }
 
   Future<void> getContacts() async {
     contactList = [];
-    contactList = await contactRepository?.getContacts();
+    contactList = await contactCases!.getContacts();
   }
 
   Future<void> addContact(ContactModel contact) async {
     isLoading = true;
     update();
-    await contactRepository?.addContact(contact);
+    await contactCases!.addContact(contact);
 
     contactList.add(contact);
     isLoading = false;
