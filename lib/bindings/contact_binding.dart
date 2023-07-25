@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:contact_app/external/datasource/storage.dart';
 import 'package:contact_app/presenter/contact/contact_controller.dart';
 
-import 'package:contact_app/infra/datasource/storage_abs.dart';
 import 'package:contact_app/infra/repository/init_storage_repository.dart';
 import 'package:contact_app/infra/repository/delete_contact_repository.dart';
 import 'package:contact_app/infra/repository/edit_contact_repository.dart';
@@ -20,14 +19,13 @@ class ContactBinding implements Bindings {
     Get.lazyPut(() => StorageClient());
     Get.put(ContactController(
       initStorageUseCase: InitStorageUseCase(
-          InitStorageRepository(storageClient: Get.find<StorageClientAbs>())),
+          InitStorageRepository(storageClient: Get.find<StorageClient>())),
       getSingleContactUseCases: GetSingleContactUseCase(
-          GetSingleContactRepository(
-              storageClient: Get.find<StorageClientAbs>())),
+          GetSingleContactRepository(storageClient: Get.find<StorageClient>())),
       editContactUseCases: EditContactUseCase(
-          EditContactRepository(storageClient: Get.find<StorageClientAbs>())),
+          EditContactRepository(storageClient: Get.find<StorageClient>())),
       deleteContactUseCases: DeleteContactUseCase(
-          DeleteContactRepository(storageClient: Get.find<StorageClientAbs>())),
+          DeleteContactRepository(storageClient: Get.find<StorageClient>())),
     ));
   }
 }
