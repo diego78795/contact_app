@@ -2,20 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:contact_app/adapters/image_adapter.dart';
-import 'package:contact_app/domain/model/contact_model.dart';
+import 'package:contact_app/domain/entity/contact_entity.dart';
 
-import 'package:contact_app/domain/usecase/contact_cases.dart';
+import 'package:contact_app/domain/usecase/edit_contact_use_case.dart';
+import 'package:contact_app/domain/usecase/delete_contact_use_case.dart';
+import 'package:contact_app/domain/usecase/get_single_contact_use_case.dart';
+
+import 'package:contact_app/domain/usecase/init_storage_use_case.dart';
 
 class ContactController extends GetxController {
-  final ContactCases? contactCases;
+  final InitStorageUseCase? initStorageUseCase;
+  final GetSingleContactUseCase? getSingleContactUseCases;
+  final EditContactUseCase? editContactUseCases;
+  final DeleteContactUseCase? deleteContactUseCases;
 
-  ContactController({@required this.contactCases})
-      : assert(contactCases != null);
+  ContactController(
+      {@required this.initStorageUseCase,
+      @required this.getSingleContactUseCases,
+      @required this.editContactUseCases,
+      @required this.deleteContactUseCases})
+      : assert(initStorageUseCase != null, deleteContactUseCases != null);
 
   final String keyContact = Get.arguments['key'];
 
   bool isLoading = true;
-  ContactModel contactData = ContactModel('', '', '', '', '', '', '');
+  ContactEntity contactData =
+      ContactEntity('', '', '', '', '', 'xx-xx-xxxx', '');
 
   final _gender = ''.obs;
   get gender => _gender.value;
@@ -43,11 +55,12 @@ class ContactController extends GetxController {
   }
 
   Future<void> initStorage() async {
-    await contactCases!.initStorage();
+    await initStorageUseCase!.initStorage();
   }
 
   Future<void> getSingleContact() async {
-    ContactModel? res = await contactCases!.getSingleContact(keyContact);
+    ContactEntity? res =
+        await getSingleContactUseCases!.getSingleContact(keyContact);
 
     if (res != null) {
       contactData = res;
@@ -57,11 +70,11 @@ class ContactController extends GetxController {
     }
   }
 
-  Future<void> editContact(ContactModel contact) async {
+  Future<void> editContact(ContactEntity contact) async {
     isLoading = true;
     update();
 
-    await contactCases!.editContact(keyContact, contact);
+    await editContactUseCases!.editContact(keyContact, contact);
 
     contactData = contact;
     isLoading = false;
@@ -72,7 +85,7 @@ class ContactController extends GetxController {
     isLoading = true;
     update();
 
-    await contactCases!.deleteContact(keyContact).then((value) {
+    await deleteContactUseCases!.deleteContact(keyContact).then((value) {
       Get.back(result: true);
     });
   }

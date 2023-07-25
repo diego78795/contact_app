@@ -2,19 +2,28 @@ import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:contact_app/adapters/image_adapter.dart';
-import 'package:contact_app/domain/model/contact_model.dart';
+import 'package:contact_app/domain/entity/contact_entity.dart';
 
-import 'package:contact_app/domain/usecase/contact_cases.dart';
+import 'package:contact_app/domain/usecase/add_contact_use_case.dart';
+import 'package:contact_app/domain/usecase/init_storage_use_case.dart';
+import 'package:contact_app/domain/usecase/get_contacts_use_case.dart';
 
 class HomeController extends GetxController {
-  final ContactCases? contactCases;
+  final InitStorageUseCase? initStorageUseCase;
+  final GetContactsUseCase? getContactsUseCase;
+  final AddContactUseCase? addContactUseCase;
 
   HomeController({
-    @required this.contactCases,
-  }) : assert(contactCases != null);
+    @required this.initStorageUseCase,
+    @required this.getContactsUseCase,
+    @required this.addContactUseCase,
+  }) : assert(
+          initStorageUseCase != null,
+          addContactUseCase != null,
+        );
 
   bool isLoading = true;
-  List<ContactModel> contactList = [];
+  List<ContactEntity> contactList = [];
 
   final _gender = ''.obs;
   get gender => _gender.value;
@@ -42,18 +51,18 @@ class HomeController extends GetxController {
   }
 
   Future<void> initStorage() async {
-    await contactCases!.initStorage();
+    await initStorageUseCase!.initStorage();
   }
 
   Future<void> getContacts() async {
     contactList = [];
-    contactList = await contactCases!.getContacts();
+    contactList = await getContactsUseCase!.getContacts();
   }
 
-  Future<void> addContact(ContactModel contact) async {
+  Future<void> addContact(ContactEntity contact) async {
     isLoading = true;
     update();
-    await contactCases!.addContact(contact);
+    await addContactUseCase!.addContact(contact);
 
     contactList.add(contact);
     isLoading = false;

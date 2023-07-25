@@ -1,4 +1,4 @@
-import 'package:contact_app/domain/model/contact_model.dart';
+import 'package:contact_app/infra/model/contact_model.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
 

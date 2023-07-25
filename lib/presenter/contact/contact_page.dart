@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-import 'package:contact_app/domain/model/contact_model.dart';
+import 'package:contact_app/domain/entity/contact_entity.dart';
 import 'package:contact_app/presenter/contact/contact_controller.dart';
 import 'package:contact_app/adapters/image_adapter.dart';
 import 'package:contact_app/extensions/validator/contact_validator.dart';
@@ -338,7 +338,9 @@ class FormModal extends GetView<ContactController> {
                 onTap: () async {
                   DateTime? newDate = await showDatePicker(
                     context: context,
-                    initialDate: _.birthdate,
+                    initialDate: _.birthdate == DateTime(0)
+                        ? DateTime(2000)
+                        : _.birthdate,
                     firstDate: DateTime(1900),
                     lastDate: DateTime.now(),
                   );
@@ -393,7 +395,7 @@ class FormModal extends GetView<ContactController> {
               onPressed: () {
                 if (keyForm.currentState!.validate()) {
                   if (_.gender != '') {
-                    ContactModel contact = ContactModel(
+                    ContactEntity contact = ContactEntity(
                         nameController.text,
                         nicknameController.text,
                         emailController.text,
