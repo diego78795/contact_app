@@ -17,9 +17,9 @@ class GetContactsRepository implements GetContactsRepositoryAbs {
   Future<List<ContactEntity>> getContacts() async {
     List<String> res = await storageClient!.storageGetContacts();
     List<ContactEntity> contactList = [];
-    res.map((contact) {
+    for (String contact in res) {
       contactList.add(ContactModel.fromJson(jsonDecode(contact)));
-    });
+    }
     return contactList;
   }
 }
