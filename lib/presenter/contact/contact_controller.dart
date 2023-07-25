@@ -26,7 +26,8 @@ class ContactController extends GetxController {
   final String keyContact = Get.arguments['key'];
 
   bool isLoading = true;
-  ContactEntity contactData = ContactEntity('', '', '', '', '', '', '');
+  ContactEntity contactData =
+      ContactEntity('', '', '', '', '', 'xx-xx-xxxx', '');
 
   final _gender = ''.obs;
   get gender => _gender.value;

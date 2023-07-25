@@ -338,7 +338,9 @@ class FormModal extends GetView<ContactController> {
                 onTap: () async {
                   DateTime? newDate = await showDatePicker(
                     context: context,
-                    initialDate: _.birthdate,
+                    initialDate: _.birthdate == DateTime(0)
+                        ? DateTime(2000)
+                        : _.birthdate,
                     firstDate: DateTime(1900),
                     lastDate: DateTime.now(),
                   );
