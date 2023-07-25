@@ -1,8 +1,8 @@
-import 'package:contact_app/domain/model/contact_model.dart';
+import 'package:contact_app/domain/entity/contact_entity.dart';
 import 'package:contact_app/domain/repository/add_contact_repository_domain.dart';
 
 abstract class AddContactAbs {
-  Future addContact(ContactModel contact);
+  Future addContact(ContactEntity contact);
 }
 
 class AddContactUseCase implements AddContactAbs {
@@ -10,7 +10,7 @@ class AddContactUseCase implements AddContactAbs {
   AddContactUseCase(this.repository);
 
   @override
-  Future addContact(ContactModel contact) async {
+  Future addContact(ContactEntity contact) async {
     return await repository.addContact(contact);
   }
 }

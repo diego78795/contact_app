@@ -1,8 +1,8 @@
-import 'package:contact_app/domain/model/contact_model.dart';
+import 'package:contact_app/domain/entity/contact_entity.dart';
 import 'package:contact_app/domain/repository/edit_contact_repository_domain.dart';
 
 abstract class EditContactAbs {
-  Future editContact(String key, ContactModel contact);
+  Future editContact(String key, ContactEntity contact);
 }
 
 class EditContactUseCase implements EditContactAbs {
@@ -10,7 +10,7 @@ class EditContactUseCase implements EditContactAbs {
   EditContactUseCase(this.repository);
 
   @override
-  Future editContact(String key, ContactModel contact) async {
+  Future editContact(String key, ContactEntity contact) async {
     await repository.editContact(key, contact);
   }
 }

@@ -5,7 +5,7 @@ import 'package:contact_app/external/datasource/storage.dart';
 
 import 'package:contact_app/infra/datasource/storage_abs.dart';
 import 'package:contact_app/infra/repository/add_contact_repository.dart';
-import 'package:contact_app/infra/repository/get_contact_repository.dart';
+import 'package:contact_app/infra/repository/get_contacts_repository.dart';
 import 'package:contact_app/infra/repository/init_storage_repository.dart';
 
 import 'package:contact_app/domain/usecase/add_contact_use_case.dart';

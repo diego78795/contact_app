@@ -1,3 +1,5 @@
+import 'package:contact_app/domain/entity/contact_entity.dart';
+
 abstract class GetSingleContactRepositoryAbs {
-  Future getSingleContact(String key);
+  Future<ContactEntity?> getSingleContact(String key);
 }

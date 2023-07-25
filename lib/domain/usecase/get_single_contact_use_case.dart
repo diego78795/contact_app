@@ -1,8 +1,8 @@
-import 'package:contact_app/domain/model/contact_model.dart';
+import 'package:contact_app/domain/entity/contact_entity.dart';
 import 'package:contact_app/domain/repository/get_single_contact_repository_domain.dart';
 
 abstract class GetSingleContactAbs {
-  Future<ContactModel?> getSingleContact(String key);
+  Future<ContactEntity?> getSingleContact(String key);
 }
 
 class GetSingleContactUseCase implements GetSingleContactAbs {
@@ -10,7 +10,7 @@ class GetSingleContactUseCase implements GetSingleContactAbs {
   GetSingleContactUseCase(this.repository);
 
   @override
-  Future<ContactModel?> getSingleContact(String key) async {
+  Future<ContactEntity?> getSingleContact(String key) async {
     return await repository.getSingleContact(key);
   }
 }

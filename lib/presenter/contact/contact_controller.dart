@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:contact_app/adapters/image_adapter.dart';
-import 'package:contact_app/domain/model/contact_model.dart';
+import 'package:contact_app/domain/entity/contact_entity.dart';
 
 import 'package:contact_app/domain/usecase/edit_contact_use_case.dart';
 import 'package:contact_app/domain/usecase/delete_contact_use_case.dart';
@@ -26,7 +26,7 @@ class ContactController extends GetxController {
   final String keyContact = Get.arguments['key'];
 
   bool isLoading = true;
-  ContactModel contactData = ContactModel('', '', '', '', '', '', '');
+  ContactEntity contactData = ContactEntity('', '', '', '', '', '', '');
 
   final _gender = ''.obs;
   get gender => _gender.value;
@@ -58,7 +58,7 @@ class ContactController extends GetxController {
   }
 
   Future<void> getSingleContact() async {
-    ContactModel? res =
+    ContactEntity? res =
         await getSingleContactUseCases!.getSingleContact(keyContact);
 
     if (res != null) {
@@ -69,7 +69,7 @@ class ContactController extends GetxController {
     }
   }
 
-  Future<void> editContact(ContactModel contact) async {
+  Future<void> editContact(ContactEntity contact) async {
     isLoading = true;
     update();
 

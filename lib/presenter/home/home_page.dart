@@ -7,7 +7,7 @@ import 'package:flutter_validator/flutter_validator.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import 'package:contact_app/adapters/image_adapter.dart';
-import 'package:contact_app/domain/model/contact_model.dart';
+import 'package:contact_app/domain/entity/contact_entity.dart';
 import 'package:contact_app/extensions/validator/contact_validator.dart';
 
 import 'package:contact_app/routes/app_pages.dart';
@@ -85,7 +85,7 @@ class ContactCard extends StatelessWidget {
       {super.key, required this.contact, required this.keyContact});
 
   final int keyContact;
-  final ContactModel contact;
+  final ContactEntity contact;
 
   @override
   Widget build(BuildContext context) {
@@ -318,7 +318,7 @@ class FormModal extends GetView<HomeController> {
               onPressed: () {
                 if (keyForm.currentState!.validate()) {
                   if (_.gender != '') {
-                    ContactModel contact = ContactModel(
+                    ContactEntity contact = ContactEntity(
                         nameController.text,
                         nicknameController.text,
                         emailController.text,

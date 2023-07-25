@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:contact_app/adapters/image_adapter.dart';
-import 'package:contact_app/domain/model/contact_model.dart';
+import 'package:contact_app/domain/entity/contact_entity.dart';
 
 import 'package:contact_app/domain/usecase/add_contact_use_case.dart';
 import 'package:contact_app/domain/usecase/init_storage_use_case.dart';
@@ -23,7 +23,7 @@ class HomeController extends GetxController {
         );
 
   bool isLoading = true;
-  List<ContactModel> contactList = [];
+  List<ContactEntity> contactList = [];
 
   final _gender = ''.obs;
   get gender => _gender.value;
@@ -59,7 +59,7 @@ class HomeController extends GetxController {
     contactList = await getContactsUseCase!.getContacts();
   }
 
-  Future<void> addContact(ContactModel contact) async {
+  Future<void> addContact(ContactEntity contact) async {
     isLoading = true;
     update();
     await addContactUseCase!.addContact(contact);
