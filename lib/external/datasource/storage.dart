@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
+import 'package:contact_app/adapters/string_hive_adapter.dart';
 import 'package:contact_app/infra/datasource/storage_abs.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
@@ -25,6 +26,9 @@ class StorageClient implements StorageClientAbs {
     final String? key = await secureStorage.read(key: 'key');
     final Uint8List decodeKey = base64Url.decode(key!);
     HiveAesCipher cipher = HiveAesCipher(decodeKey);
+    if (!Hive.isAdapterRegistered(0)) {
+      Hive.registerAdapter(StringHiveAdapter());
+    }
     contactBox =
         await Hive.openBox<String>('contactList', encryptionCipher: cipher);
   }
